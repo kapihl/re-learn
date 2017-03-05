@@ -14,8 +14,12 @@
 <button id="b7" name="butG" value="Golf"    type="button">-G-</button>
 <button id="b8" name="butH" value="Hotel"   type="button">-H-</button>
 <button id="b9" name="butI" value="India"   type="button">-I-</button>
-
+<p>
+<p>
+<button id="100" name="but_history" value="hist" type="button">Show click history</button>
 <script type="text/javascript">
+// click history
+var save = []
 
 // bind html to javascript
 for (i=1; i < 10; i++){
@@ -25,12 +29,30 @@ for (i=1; i < 10; i++){
 }
 
 function record(event, msg){
-    cur.onclick  = function () {
+    event.onclick  = function () {
     	console.log("List elements")
-    	say = "Name:" + event.name + ", elem val:" + event.value + ", id:"+ msg
-  		console.log(say)
+    	elem_txt = "Name:" + event.name + ", elem val:" + event.value + ", id:"+ msg
+  		console.log(elem_txt)
+		save.push(elem_txt)
+        console.log("add to history")
     }
 }
+
+function print_history(h){
+    var line = ""
+    console.log("len of save arr is:" + save.length)
+	for (i=0; i < save.length; i++){
+        console.log('hist' + i)
+		//document.write(h[i])
+        line = line.concat(save[i])
+        console.log("line is :" +line)
+	}
+	window.alert("content" + line)
+}
+var show_hist = document.getElementById('100')
+show_hist.onclick = function () {print_history(save);}
+
+
 
 </script>
 </body>
