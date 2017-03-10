@@ -2,9 +2,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title>Track this</title>
+<title>knapper-js.html</title>
+<script type="text/javascript" src="knapper.js" async></script>
 </head>
 <body>
+
 <button id="b1" name="butA" value="Alfa"    type="button">-A-</button>
 <button id="b2" name="butB" value="Bravo"   type="button">-B-</button>
 <button id="b3" name="butC" value="Charlie" type="button">-C-</button>
@@ -17,43 +19,6 @@
 <p>
 <p>
 <button id="100" name="but_history" value="hist" type="button">Show click history</button>
-<script type="text/javascript">
-// click history
-var save = []
 
-// bind html to javascript
-for (i=1; i < 10; i++){
-    var id = 'b'.concat(i.toString())
-	var cur = document.getElementById(id)
-    record(cur, id);
-}
-
-function record(event, msg){
-    event.onclick  = function () {
-    	console.log("List elements")
-    	elem_txt = "Name:" + event.name + ", elem val:" + event.value + ", id:"+ msg
-  		console.log(elem_txt)
-		save.push(elem_txt)
-        console.log("add to history")
-    }
-}
-
-function print_history(h){
-    var line = ""
-    console.log("len of save arr is:" + save.length)
-	for (i=0; i < save.length; i++){
-        console.log('hist' + i)
-		//document.write(h[i])
-        line = line.concat(save[i])
-        console.log("line is :" +line)
-	}
-	window.alert("content" + line)
-}
-var show_hist = document.getElementById('100')
-show_hist.onclick = function () {print_history(save);}
-
-
-
-</script>
 </body>
 </html>
