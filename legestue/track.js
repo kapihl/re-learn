@@ -3,7 +3,7 @@
 var item = document.getElementsByTagName("a")
 
 line_sz = 160
-elems   = 10
+elems   = 100
 mark = Array(line_sz).join("#") + "\n"
 
 console.log(mark)
