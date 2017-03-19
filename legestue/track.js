@@ -2,14 +2,15 @@
 
 var item = document.getElementsByTagName("a")
 
-size = 160
-mark = Array(size).join("#") + "\n"
+line_sz = 160
+elems   = 10
+mark = Array(line_sz).join("#") + "\n"
 
 console.log(mark)
 console.log("Document has " + item.length + " items")
-console.log("First 20 are: ")
+console.log("First " + elems + " are: ")
 
-for (var i = 0; i < 20; i++){
+for (var i = 0; i < elems; i++){
   console.log(item[i])
 }
 
