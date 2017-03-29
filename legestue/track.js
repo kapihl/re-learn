@@ -12,7 +12,6 @@ function ignore_same_links(){
     // dict allways empty at start, so never filled!!
     if (typeof dict[key] === 'undefined'){
         dict[key] = item[i];
-        //console.log("key " + key + " val :" +  dict[key])
     }
   }
 }
@@ -24,8 +23,7 @@ function add_buttons(){
     i++
     console.log("Before alterations")
     console.log(dict[key])
-  //  console.log(testf(dict[key]))
-    var current = dict[key]
+     var current = dict[key]
     var parent = current.parentElement
     // add a button
     var but_id = "insert_button_id" + i
@@ -44,13 +42,7 @@ function add_buttons(){
     ul.appendChild(li2)
     var ul_id = "insert_ul_id"+ i
     ul.id = ul_id
-    // FIX: both button and link should each be LI child in new UL. UL -> DOM insert
-
     // insert back into html
-    
-    console.log("parent is: "  + parent)
-    console.log("wrapper is: " + ul)
-    console.log("current is: " + current)
     parent.appendChild(ul)
 
     // fetch recent created elements and log
