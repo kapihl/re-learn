@@ -12,10 +12,6 @@ console.log("Document has " + item.length + " items")
 console.log("First " + elems + " are: ")
 
 
-function testf (say){
-  return "funtest" + say;
-}
-
 function remove_dublicates(){
   // iterate trough dom-list, make dictionary of href = full dom item
   // before inserting, do lookup. Insert only if not found
@@ -32,34 +28,11 @@ function remove_dublicates(){
   }
 }
 
-
+// do removal
 var some = remove_dublicates()
 
-// loop over dict
-console.log(mark + "print out dict")
-for(var key in dict) {
-    console.log("val is: " + dict[key])
-}
-
-console.log("test_removal")
-
 console.log("len of item " + item.length)
-
-// why is dict.length 0? Kan man ikke tage lengt af et object?
-// hvis nej, indbyg size i objectet dict
-
 console.log("len of dict " + Object.keys(dict).length)
-
-
-// TODO 2:  make below code into function
-
-
-// TODO 3: rerun igen, få alle dubletter væk.
-
-var say = testf(mark)
-console.log(say)
-
-//for (var i = 0; i < elems; i++){
 
 // counter
 var i = 0
