@@ -27,6 +27,7 @@ function add_buttons(is_log){
       console.log(dict[key])
     }
     var current = dict[key]
+    // parent: insert generated DOM elems here
     var parent = current.parentElement
     // add a button
     var but_id = "insert_button_id" + i
@@ -45,8 +46,13 @@ function add_buttons(is_log){
     ul.appendChild(li2)
     var ul_id = "insert_ul_id"+ i
     ul.id = ul_id
-    // insert back into html
-    parent.appendChild(ul)
+    // make div: use as border
+    var div = document.createElement("DIV")
+    div.style.border = "thick solid #0000BB";
+    div.appendChild(ul)
+
+    // insert generated DOM elems back into html
+    parent.appendChild(div)
 
     if (is_log === true){
       // fetch recent created elements and log
