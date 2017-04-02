@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>Test page<head>
+<body>
+<p>
+<button id="startCmd"><span tip="Start recording."> START</span></button> 
+<button id="pauseCmd"><span tip="Pause recording."> PAUSE</span></button>
+<button id="againCmd"><span tip="Un-pause:record again"> AGAIN</span></button>
+<button id="doneCmd"> <span tip="Stop recording"> DONE</span></button>
+<button id="showCmd"> <span tip="Show what you recordet"> SHOW</span></button>
+<!-- more commands: delete, step >>, step << -->
+</p>
+
+<script type="text/javascript" src="load.js" async=""></script>
+<p>
+<a href="http://www.dr.dk">dr</a>
+<a href="http://www.telia.dk">telia</a>
+<a href="http://www.yousee.dk">yousee</a>
+<a href="http://www.cnn.com">cnn</a>
+</p>
+<div></div>
+</body>
+</html>
+
+
+<style>
+body{background-color: #d8da3d}
+
+span[tip] {
+  position: relative;
+  color: #00F;
+}
+
+span[tip]:hover::after {
+  content: attr(tip);
+  position: absolute;
+  left: 0;
+  top: 18px;
+  min-width: 150px;
+  border: 1px #aaaaaa solid;
+  border-radius: 10px;
+  background-color: #ffffcc;
+  padding: 4px;
+  color: #000000;
+  font-size: 14px;
+  z-index: 1;
+}
+</style>
