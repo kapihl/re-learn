@@ -26,7 +26,9 @@ function load(url){
   iframe.src = url;
   iframe.width  = 1200;
   iframe.height = 800;
-  document.div.appendChild(iframe);
+  // insert at div tag
+  var myDiv = document.getElementById("loadLocalFrame")
+  myDiv.appendChild(iframe);
 } 
 
 // CONTROL
@@ -136,6 +138,7 @@ function doStop(){
 function trackThis(txt, ref){
   myLog("trackThis :" + ref);
   global.history[txt] = ref;
+  showLocal(ref)
 }
 
 // showLocal: show in iframe
