@@ -2,10 +2,18 @@
 
 // GLOBAL VARS
 var history = {}
+var DEBUG = false
+
+// UTIL
+function myLog(msg){
+  if (DEBUG){
+    console.log(msg);
+  }
+}
 
 // FUNDEFS
 function initialize(){
-  console.log("init START")
+  myLog("init START")
   button = document.getElementsByTagName("BUTTON")
   for (i=0; i < button.length; i++){
     command(button[i]);
@@ -42,18 +50,18 @@ function command(cmd){
 //   2nd loop: remove old, and add new links to/from DOM
 function doStart(){
   var linkStore = [] 
-  console.log("doStart START");
+  myLog("doStart START");
   var link = document.getElementsByTagName("A");
   for (var i=0; i < link.length; i++){
     var curLink = link[i]
-    console.log("LOOP:" + curLink);
+    myLog("LOOP:" + curLink);
     // add triple to store
     var linkInfo = {}
     linkInfo['old']     = curLink;
     linkInfo['anc']     = curLink.parentElement;
     linkStore.push(linkInfo)
   }
-  console.log("Create links, add to DOM")
+  myLog("Create links, add to DOM")
 
   // Adjust: remove old links, insert new
   for (var i=0; i < linkStore.length; i++){
@@ -64,28 +72,28 @@ function doStart(){
     var url = curLink.href;
     var txt = curLink.text;    
     var trackBut = mk_trackLink(url, txt);
-    console.log("track but build, text:" + trackBut.value + "  fn: " + trackBut.onclick);
+    myLog("track but build, text:" + trackBut.value + "  fn: " + trackBut.onclick);
      // remove old, add new
-     console.log("ALTER DOM. \n Old: " + info.old + " New: " + trackBut)
+     myLog("ALTER DOM. \n Old: " + info.old + " New: " + trackBut)
      parent.removeChild(curLink)
      parent.appendChild(trackBut) 
   }
-  console.log("doStart END");
+  myLog("doStart END");
 }
 
 // trackLink: DOM item -> DOM item
 function mk_trackLink(ref, txt){
-  console.log("trackLink");
+  myLog("trackLink");
   //var fn = document.createElement("SCRIPT");
   var code = "trackThis(\'".concat(txt)
   code = code.concat("','");
   code = code.concat(ref); 
   code = code.concat("\');}");
-  console.log("STRING: " + code);
+  myLog("STRING: " + code);
 // + "showLocal('" + ref + "');}";
   //var code = "showLocal(" + ref + ");";
   //var code = "alert(\"hello\")";
-  console.log("trackThis, code : " + code);
+  myLog("trackThis, code : " + code);
   //fn.text  = code;
   var butLink = document.createElement("BUTTON");
   butLink.value = txt;
@@ -95,7 +103,7 @@ function mk_trackLink(ref, txt){
   // butLink.onclick = evCode;
   // butLink.setAttribute('onclick','function(){alert(\'hello\');}')
   butLink.onclick = function(){
-    console.log("Inside generated button onclick");
+    myLog("Inside generated button onclick");
     trackThis(txt, ref);
   }
   return butLink;
@@ -120,7 +128,7 @@ function doStop(){
 
 // trackThis: add to history
 function trackThis(txt, ref){
-  console.log("trackThis :" + ref);
+  myLog("trackThis :" + ref);
   history[txt] = ref;
 }
 
