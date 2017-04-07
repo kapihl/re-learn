@@ -1,12 +1,13 @@
 // Load DOM into JS-context. Simple, non-async
 
 // GLOBAL VARS
-var history = {}
-var DEBUG = false
+var global = {};
+global.history = {}
+global.debug = false
 
 // UTIL
 function myLog(msg){
-  if (DEBUG){
+  if (global.debug){
     console.log(msg);
   }
 }
@@ -38,12 +39,17 @@ function command(cmd){
         break;
       case "showCmd" : doShow();       
         break;
-      case "stopCmd" : alert("N/A");
+      case "pauseCmd" : alert("N/A");
+        break;
+      case "clearCmd" : doClear();
         break;
       default: alert("No such command");
     }
   }
 }
+
+// clear history
+function doClear(){ global.history = {}; }
 
 // doStart: alter all links, a) track, b) show in iframe
 //   1st loop: linkStore populated with old, new and parent
@@ -113,8 +119,8 @@ function mk_trackLink(ref, txt){
 function doShow(text){
   var out = "";
   var spc = Array(100).join("#") + "\n";
-  for (var key in history){
-    var tmp = "Visited " + key + " at " + history[key] + "\n"
+  for (var key in global.history){
+    var tmp = "Visited " + key + " at " + global.history[key] + "\n"
     out = out.concat(tmp)
   }
   console.log(spc + "Showing history\n" + out + "\n" + spc);
@@ -129,7 +135,7 @@ function doStop(){
 // trackThis: add to history
 function trackThis(txt, ref){
   myLog("trackThis :" + ref);
-  history[txt] = ref;
+  global.history[txt] = ref;
 }
 
 // showLocal: show in iframe
