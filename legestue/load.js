@@ -47,44 +47,57 @@ function doStart(){
   for (var i=0; i < link.length; i++){
     var curLink = link[i]
     console.log("LOOP:" + curLink);
-    // make new link
-    var url = curLink.href;
-    var txt = curLink.text;    
-    var newL = trackLink(url, txt);
-    console.log("newLink created! Text:" + newL.text + " and href: " + newL.onclick + "\n src" + newL.onclick)
     // add triple to store
     var linkInfo = {}
     linkInfo['old']     = curLink;
-    linkInfo['created'] = newL;
     linkInfo['anc']     = curLink.parentElement;
     linkStore.push(linkInfo)
   }
+  console.log("Create links, add to DOM")
+
   // Adjust: remove old links, insert new
   for (var i=0; i < linkStore.length; i++){
-     var info = linkStore[i];
-     var parent = info.anc
-     // remove old
-     console.log("ALTER DOM. \n Old: " + info.old + " New: " + info.created)
-     parent.removeChild(info.old)
-     parent.appendChild(info.created) 
+    var info = linkStore[i];
+    var parent = info.anc;
+    var curLink = info.old;
+ // make new link
+    var url = curLink.href;
+    var txt = curLink.text;    
+    var trackBut = mk_trackLink(url, txt);
+    console.log("track but build, text:" + trackBut.value + "  fn: " + trackBut.onclick);
+     // remove old, add new
+     console.log("ALTER DOM. \n Old: " + info.old + " New: " + trackBut)
+     parent.removeChild(curLink)
+     parent.appendChild(trackBut) 
   }
   console.log("doStart END");
 }
 
 // trackLink: DOM item -> DOM item
-function trackLink(ref, txt){
+function mk_trackLink(ref, txt){
   console.log("trackLink");
-  var fn = document.createElement("SCRIPT");
-  var co   = "trackThis("+ txt + "," + ref +");" + "showLocal(" + ref + ");";
-  var code = "showLocal(" + ref + ");";
+  //var fn = document.createElement("SCRIPT");
+  var code = "trackThis(\'".concat(txt)
+  code = code.concat("','");
+  code = code.concat(ref); 
+  code = code.concat("\');}");
+  console.log("STRING: " + code);
+// + "showLocal('" + ref + "');}";
+  //var code = "showLocal(" + ref + ");";
   //var code = "alert(\"hello\")";
-  console.log("trackThis, code : " + code)
-  fn.text  = code;
+  console.log("trackThis, code : " + code);
+  //fn.text  = code;
   var butLink = document.createElement("BUTTON");
   butLink.value = txt;
-  butLink.type  = "button"
+  butLink.type  = "button";
   butLink.innerHTML = txt;
-  //butLink.onclick = code;
+  // var evCode = eval(code);
+  // butLink.onclick = evCode;
+  // butLink.setAttribute('onclick','function(){alert(\'hello\');}')
+  butLink.onclick = function(){
+    console.log("Inside generated button onclick");
+    trackThis(txt, ref);
+  }
   return butLink;
 }
 
@@ -93,8 +106,8 @@ function doShow(text){
   var out = "";
   var spc = Array(100).join("#") + "\n";
   for (var key in history){
-    var tmp = "Visited " + key + " at " + history[key];
-    out += out
+    var tmp = "Visited " + key + " at " + history[key] + "\n"
+    out = out.concat(tmp)
   }
   console.log(spc + "Showing history\n" + out + "\n" + spc);
 }
@@ -107,7 +120,7 @@ function doStop(){
 
 // trackThis: add to history
 function trackThis(txt, ref){
-  cosole.log("trackThis :" + ref);
+  console.log("trackThis :" + ref);
   history[txt] = ref;
 }
 
