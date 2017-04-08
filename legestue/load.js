@@ -4,8 +4,13 @@
 var global = {};
 global.history = {};
 global.debug = false;
+var init = initialize();
+global.insert = init.insert;
+global.page   = init.page;
 
-// UTIL
+
+// UTIL START
+// --------------------------------------------------------------
 function myLog(msg){
   if (global.debug){
     console.log(msg);
@@ -19,17 +24,25 @@ function initialize(){
   for (i=0; i < button.length; i++){
     command(button[i]);
 	}
+  // hide GUI for showing visited links
   document.getElementById("showLinksVisited").style.visibility = "hidden";
+  var iframe = document.createElement('iframe');
+  iframe.width  = 1200;
+  iframe.height = 800;
+  iframe.sandbox ="";
+  iframe.style.visibility = "hidden";
+  // insert at div tag
+  var myDiv = document.getElementById("loadLocalFrame");
+  myDiv.style.visibility = "hidden";
+  myDiv.appendChild(iframe);
+  var tuple = {"insert": myDiv, "page": iframe};
+  return tuple;
 }
 
 function load(url){
-  var iframe = document.createElement('iframe');
-  iframe.src = url;
-  iframe.width  = 1200;
-  iframe.height = 800;
-  // insert at div tag
-  var myDiv = document.getElementById("loadLocalFrame");
-  myDiv.appendChild(iframe);
+  global.insert.style.visibility = "visible";
+  global.page.src = url;
+  global.page.style.visibility = "visible";
 } 
 
 // CONTROL
@@ -151,9 +164,7 @@ function trackThis(txt, ref){
 // showLocal: show in iframe
 function showLocal(href){
   console.log("showLocal: " + href);
+  //makeCorsRequest(href)
   load(href);
 }
 
-// MAIN
-
-initialize();
