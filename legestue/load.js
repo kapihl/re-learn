@@ -2,8 +2,8 @@
 
 // GLOBAL VARS
 var global = {};
-global.history = {}
-global.debug = false
+global.history = {};
+global.debug = false;
 
 // UTIL
 function myLog(msg){
@@ -14,8 +14,8 @@ function myLog(msg){
 
 // FUNDEFS
 function initialize(){
-  myLog("init START")
-  button = document.getElementsByTagName("BUTTON")
+  myLog("init START");
+  button = document.getElementsByTagName("BUTTON");
   for (i=0; i < button.length; i++){
     command(button[i]);
 	}
@@ -27,7 +27,7 @@ function load(url){
   iframe.width  = 1200;
   iframe.height = 800;
   // insert at div tag
-  var myDiv = document.getElementById("loadLocalFrame")
+  var myDiv = document.getElementById("loadLocalFrame");
   myDiv.appendChild(iframe);
 } 
 
@@ -66,19 +66,19 @@ function doClear(){ global.history = {}; }
 //   1st loop: linkStore populated with old, new and parent
 //   2nd loop: remove old, and add new links to/from DOM
 function doStart(){
-  var linkStore = [] 
+  var linkStore = [];
   myLog("doStart START");
   var link = document.getElementsByTagName("A");
   for (var i=0; i < link.length; i++){
-    var curLink = link[i]
+    var curLink = link[i];
     myLog("LOOP:" + curLink);
     // add triple to store
-    var linkInfo = {}
+    var linkInfo = {};
     linkInfo['old']     = curLink;
     linkInfo['anc']     = curLink.parentElement;
-    linkStore.push(linkInfo)
+    linkStore.push(linkInfo);
   }
-  myLog("Create links, add to DOM")
+  myLog("Create links, add to DOM");
 
   // Adjust: remove old links, insert new
   for (var i=0; i < linkStore.length; i++){
@@ -91,9 +91,9 @@ function doStart(){
     var trackBut = mk_trackLink(url, txt);
     myLog("track but build, text:" + trackBut.value + "  fn: " + trackBut.onclick);
      // remove old, add new
-     myLog("ALTER DOM. \n Old: " + info.old + " New: " + trackBut)
-     parent.removeChild(curLink)
-     parent.appendChild(trackBut) 
+     myLog("ALTER DOM. \n Old: " + info.old + " New: " + trackBut);
+     parent.removeChild(curLink);
+     parent.appendChild(trackBut);
   }
   myLog("doStart END");
 }
@@ -102,9 +102,9 @@ function doStart(){
 function mk_trackLink(ref, txt){
   myLog("trackLink");
   //var fn = document.createElement("SCRIPT");
-  var code = "trackThis(\'".concat(txt)
+  var code = "trackThis(\'".concat(txt);
   code = code.concat("','");
-  code = code.concat(ref); 
+  code = code.concat(ref);
   code = code.concat("\');}");
   myLog("STRING: " + code);
 // + "showLocal('" + ref + "');}";
@@ -131,8 +131,8 @@ function doShow(text){
   var out = "";
   var spc = Array(100).join("#") + "\n";
   for (var key in global.history){
-    var tmp = "Visited " + key + " at " + global.history[key] + "\n"
-    out = out.concat(tmp)
+    var tmp = "Visited " + key + " at " + global.history[key] + "\n";
+    out = out.concat(tmp);
   }
   console.log(spc + "Showing history\n" + out + "\n" + spc);
 }
@@ -147,7 +147,7 @@ function doStop(){
 function trackThis(txt, ref){
   myLog("trackThis :" + ref);
   global.history[txt] = ref;
-  showLocal(ref)
+  showLocal(ref);
 }
 
 // showLocal: show in iframe
@@ -158,4 +158,4 @@ function showLocal(href){
 
 // MAIN
 
-initialize()
+initialize();
