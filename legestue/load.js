@@ -34,18 +34,27 @@ function load(url){
 // CONTROL
 // command: cmd switch
 function command(cmd){
+  var status = document.getElementById("statusMsg");
   cmd.onclick = function(){
     console.log("Command pressed: " + cmd.id);
     switch (cmd.id){
-      case "startCmd": doStart(); 
+      case "startCmd":
+        doStart();
+        status.value = "Recording started";
         break;
-      case "showCmd" : doShow();       
+      case "showCmd" :
+        doShow();
+        status.value = "Showing links visited";
         break;
-      case "pauseCmd" : alert("N/A");
+      case "pauseCmd":
+        status.value = "Not implemented yet";
         break;
-      case "clearCmd" : doClear();
+      case "clearCmd":
+        doClear();
+        status.value = "Clear link history";
         break;
-      default: alert("No such command");
+      default:
+        status.value = "Wrong command: " + cmd.id + ". No such command exists";
     }
   }
 }
