@@ -15,10 +15,11 @@ function myLog(msg){
 // FUNDEFS
 function initialize(){
   myLog("init START");
-  button = document.getElementsByTagName("BUTTON");
+  var button = document.getElementsByTagName("BUTTON");
   for (i=0; i < button.length; i++){
     command(button[i]);
 	}
+  document.getElementById("showLinksVisited").style.visibility = "hidden";
 }
 
 function load(url){
@@ -60,7 +61,10 @@ function command(cmd){
 }
 
 // clear history
-function doClear(){ global.history = {}; }
+function doClear(){
+  global.history = {};
+  document.getElementById("showLinksVisited").value = "No links visited"
+}
 
 // doStart: alter all links, a) track, b) show in iframe
 //   1st loop: linkStore populated with old and parent
@@ -119,15 +123,16 @@ function mk_trackLink(ref, txt){
   return butLink;
 }
 
-// later: show in html
+// show content of global.history
 function doShow(text){
+  var showLinks = document.getElementById("showLinksVisited");
+  showLinks.style.visibility = "visible";
   var out = "";
-  var spc = Array(100).join("#") + "\n";
   for (var key in global.history){
     var tmp = "Visited " + key + " at " + global.history[key] + "\n";
     out = out.concat(tmp);
   }
-  console.log(spc + "Showing history\n" + out + "\n" + spc);
+  showLinks.value = out;
 }
 
 function doStop(){
