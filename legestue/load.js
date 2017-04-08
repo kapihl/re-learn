@@ -63,7 +63,7 @@ function command(cmd){
 function doClear(){ global.history = {}; }
 
 // doStart: alter all links, a) track, b) show in iframe
-//   1st loop: linkStore populated with old, new and parent
+//   1st loop: linkStore populated with old and parent
 //   2nd loop: remove old, and add new links to/from DOM
 function doStart(){
   var linkStore = [];
@@ -72,7 +72,7 @@ function doStart(){
   for (var i=0; i < link.length; i++){
     var curLink = link[i];
     myLog("LOOP:" + curLink);
-    // add triple to store
+    // add tuple to store
     var linkInfo = {};
     linkInfo['old']     = curLink;
     linkInfo['anc']     = curLink.parentElement;
@@ -85,7 +85,7 @@ function doStart(){
     var info = linkStore[i];
     var parent = info.anc;
     var curLink = info.old;
- // make new link
+    // make new link
     var url = curLink.href;
     var txt = curLink.text;    
     var trackBut = mk_trackLink(url, txt);
@@ -101,24 +101,17 @@ function doStart(){
 // trackLink: DOM item -> DOM item
 function mk_trackLink(ref, txt){
   myLog("trackLink");
-  //var fn = document.createElement("SCRIPT");
   var code = "trackThis(\'".concat(txt);
   code = code.concat("','");
   code = code.concat(ref);
   code = code.concat("\');}");
   myLog("STRING: " + code);
-// + "showLocal('" + ref + "');}";
-  //var code = "showLocal(" + ref + ");";
-  //var code = "alert(\"hello\")";
   myLog("trackThis, code : " + code);
-  //fn.text  = code;
+
   var butLink = document.createElement("BUTTON");
   butLink.value = txt;
   butLink.type  = "button";
   butLink.innerHTML = txt;
-  // var evCode = eval(code);
-  // butLink.onclick = evCode;
-  // butLink.setAttribute('onclick','function(){alert(\'hello\');}')
   butLink.onclick = function(){
     myLog("Inside generated button onclick");
     trackThis(txt, ref);
