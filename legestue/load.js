@@ -20,9 +20,10 @@ function myLog(msg){
 // FUNDEFS
 function initialize(){
   myLog("init START");
+  var gui = new Gui();
   var button = document.getElementsByTagName("BUTTON");
   for (i=0; i < button.length; i++){
-    command(button[i]);
+    gui.command(button[i])
 	}
   // hide GUI for showing visited links
   document.getElementById("showLinksVisited").style.visibility = "hidden";
@@ -45,112 +46,115 @@ function load(url){
   global.page.style.visibility = "visible";
 } 
 
-// CONTROL
-// command: cmd switch
-function command(cmd){
-  var status = document.getElementById("statusMsg");
-  cmd.onclick = function(){
-    console.log("Command pressed: " + cmd.id);
-    switch (cmd.id){
-      case "startCmd":
-        doStart();
-        status.value = "Recording started";
-        break;
-      case "showCmd" :
-        doShow();
-        status.value = "Showing links visited";
-        break;
-      case "pauseCmd":
-        status.value = "Not implemented yet";
-        break;
-      case "clearCmd":
-        doClear();
-        status.value = "Clear link history";
-        break;
-      default:
-        status.value = "Wrong command: " + cmd.id + ". No such command exists";
-    }
-  }
-}
-
-// clear history
-function doClear(){
-  global.history = {};
-  document.getElementById("showLinksVisited").value = "No links visited"
-}
-
-// doStart: alter all links, a) track, b) show in iframe
-//   1st loop: linkStore populated with old and parent
-//   2nd loop: remove old, and add new links to/from DOM
 function doStart(){
-  var linkStore = [];
-  myLog("doStart START");
-  var link = document.getElementsByTagName("A");
-  for (var i=0; i < link.length; i++){
-    var curLink = link[i];
-    myLog("LOOP:" + curLink);
-    // add tuple to store
-    var linkInfo = {};
-    linkInfo['old']     = curLink;
-    linkInfo['anc']     = curLink.parentElement;
-    linkStore.push(linkInfo);
-  }
-  myLog("Create links, add to DOM");
-
-  // Adjust: remove old links, insert new
-  for (var i=0; i < linkStore.length; i++){
-    var info = linkStore[i];
-    var parent = info.anc;
-    var curLink = info.old;
-    // make new link
-    var url = curLink.href;
-    var txt = curLink.text;    
-    var trackBut = mk_trackLink(url, txt);
-    myLog("track but build, text:" + trackBut.value + "  fn: " + trackBut.onclick);
-     // remove old, add new
-     myLog("ALTER DOM. \n Old: " + info.old + " New: " + trackBut);
-     parent.removeChild(curLink);
-     parent.appendChild(trackBut);
-  }
-  myLog("doStart END");
+  console.log("script context");
 }
 
-// trackLink: DOM item -> DOM item
-function mk_trackLink(ref, txt){
-  myLog("trackLink");
-  var code = "trackThis(\'".concat(txt);
-  code = code.concat("','");
-  code = code.concat(ref);
-  code = code.concat("\');}");
-  myLog("STRING: " + code);
-  myLog("trackThis, code : " + code);
 
-  var butLink = document.createElement("BUTTON");
-  butLink.value = txt;
-  butLink.type  = "button";
-  butLink.innerHTML = txt;
-  butLink.onclick = function(){
-    myLog("Inside generated button onclick");
-    trackThis(txt, ref);
+
+function Gui(){
+  this.command = function (cmd){
+    var status = document.getElementById("statusMsg");
+    cmd.onclick = function(){
+      console.log("Command pressed: " + cmd.id);
+      switch (cmd.id){
+        case "showCmd" :
+          doShow();
+          status.value = "Showing links visited";
+          break;
+        case "pauseCmd":
+          status.value = "Not implemented yet";
+          break;
+        case "clearCmd":
+          doClear();
+          status.value = "Clear link history";
+          break;
+        case "startCmd":
+          doStart();
+          status.value = "Recording started";
+          break;
+        default:
+          status.value = "Wrong command: " + cmd.id + ". No such command exists";
+      }
+    }
+  };
+
+  function doShow(){
+  // show content of global.history
+    var showLinks = document.getElementById("showLinksVisited");
+    showLinks.style.visibility = "visible";
+    var out = "";
+    for (var key in global.history){
+      var tmp = "Visited " + key + " at " + global.history[key] + "\n";
+      out = out.concat(tmp);
+    }
+    showLinks.value = out;
+  };
+
+
+  function doClear(){
+    global.history = {};
+    document.getElementById("showLinksVisited").value = "No links visited";
+  };
+
+  function doStart(){
+    // doStart: alter all links, a) track, b) show in iframe
+    //   1st loop: linkStore populated with old and parent
+    //   2nd loop: remove old, and add new links to/from DOM
+    var linkStore = [];
+    myLog("doStart START");
+    var link = document.getElementsByTagName("A");
+    for (var i=0; i < link.length; i++){
+      var curLink = link[i];
+      myLog("LOOP:" + curLink);
+      // add tuple to store
+      var linkInfo = {};
+      linkInfo['old']     = curLink;
+      linkInfo['anc']     = curLink.parentElement;
+      linkStore.push(linkInfo);
+    }
+    myLog("Create links, add to DOM");
+
+    // Adjust: remove old links, insert new
+    for (var i=0; i < linkStore.length; i++){
+      var info = linkStore[i];
+      var parent = info.anc;
+      var curLink = info.old;
+      // make new link
+      var url = curLink.href;
+      var txt = curLink.text;    
+      var trackBut = mkTrackLink(url, txt);
+      myLog("track but build, text:" + trackBut.value + "  fn: " + trackBut.onclick);
+       // remove old, add new
+       myLog("ALTER DOM. \n Old: " + info.old + " New: " + trackBut);
+       parent.removeChild(curLink);
+       parent.appendChild(trackBut);
+    }
+    myLog("doStart END");
+  };
+
+  function mkTrackLink(ref, txt){
+  // trackLink: DOM item -> DOM item
+    myLog("trackLink");
+    var code = "trackThis(\'".concat(txt);
+    code = code.concat("','");
+    code = code.concat(ref);
+    code = code.concat("\');}");
+    myLog("STRING: " + code);
+    myLog("trackThis, code : " + code);
+
+    var butLink = document.createElement("BUTTON");
+    butLink.value = txt;
+    butLink.type  = "button";
+    butLink.innerHTML = txt;
+    butLink.onclick = function(){
+      myLog("Inside generated button onclick");
+      trackThis(txt, ref);
+    }
+    return butLink;
   }
-  return butLink;
-}
+}// end of Gui-object
 
-// show content of global.history
-function doShow(text){
-  var showLinks = document.getElementById("showLinksVisited");
-  showLinks.style.visibility = "visible";
-  var out = "";
-  for (var key in global.history){
-    var tmp = "Visited " + key + " at " + global.history[key] + "\n";
-    out = out.concat(tmp);
-  }
-  showLinks.value = out;
-}
-
-function doStop(){
-  alert('NOP');
-}
 
 // FUNS CALLED WHEN RECORDING ON
 
