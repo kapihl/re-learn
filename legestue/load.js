@@ -1,57 +1,50 @@
 // Load DOM into JS-context. Simple, non-async
 
-// GLOBAL VARS
-var global = {};
-global.history = {};
-global.debug = false;
-var init = initialize();
-global.insert = init.insert;
-global.page   = init.page;
-
-
-// UTIL START
-// --------------------------------------------------------------
-function myLog(msg){
-  if (global.debug){
-    console.log(msg);
+// util
+function Util(){
+  this.myLog = function(msg){
+    var debug = false;
+    if (debug){
+      console.log(msg);
+    }
   }
 }
 
-// FUNDEFS
-function initialize(){
-  myLog("init START");
-  var gui = new Gui();
-  var button = document.getElementsByTagName("BUTTON");
-  for (i=0; i < button.length; i++){
-    gui.command(button[i])
-	}
-  // hide GUI for showing visited links
-  document.getElementById("showLinksVisited").style.visibility = "hidden";
-  var iframe = document.createElement('iframe');
-  iframe.width  = 1200;
-  iframe.height = 800;
-  iframe.sandbox ="";
-  iframe.style.visibility = "hidden";
-  // insert at div tag
-  var myDiv = document.getElementById("loadLocalFrame");
-  myDiv.style.visibility = "hidden";
-  myDiv.appendChild(iframe);
-  var tuple = {"insert": myDiv, "page": iframe};
-  return tuple;
-}
+// 'class' Run: prepare, setup and run
+function Run(){
+  global = { "history": {}, "insert": null, "page": null, "util": null};
+  var init = initialize();
+  global.insert = init.insert;
+  global.page   = init.page;
+ 
+  function initialize(){
+    console.log("util " + util + " string " + util.toString());
+    var gui = new Gui();
+    console.log("gui " + gui + " string " + gui.toString());
+    util.myLog("init START");
+  
+   var button = document.getElementsByTagName("BUTTON");
+    for (i=0; i < button.length; i++){
+      gui.command(button[i])
+	  }
+    // hide GUI for showing visited links
+    document.getElementById("showLinksVisited").style.visibility = "hidden";
+    var iframe = document.createElement('iframe');
+    iframe.width  = 1200;
+    iframe.height = 800;
+    iframe.sandbox ="";
+    iframe.style.visibility = "hidden";
+    // insert at div tag
+    var myDiv = document.getElementById("loadLocalFrame");
+    myDiv.style.visibility = "hidden";
+    myDiv.appendChild(iframe);
+    var tuple = {"insert": myDiv, "page": iframe};
+    return tuple;
+  }
+}// end prepare
 
-function load(url){
-  global.insert.style.visibility = "visible";
-  global.page.src = url;
-  global.page.style.visibility = "visible";
-} 
 
-function doStart(){
-  console.log("script context");
-}
-
-
-
+// 'class' Gui: most of payload functionality.
 function Gui(){
   this.command = function (cmd){
     var status = document.getElementById("statusMsg");
@@ -78,7 +71,7 @@ function Gui(){
       }
     }
   };
-
+ 
   function doShow(){
   // show content of global.history
     var showLinks = document.getElementById("showLinksVisited");
@@ -91,7 +84,6 @@ function Gui(){
     showLinks.value = out;
   };
 
-
   function doClear(){
     global.history = {};
     document.getElementById("showLinksVisited").value = "No links visited";
@@ -102,18 +94,18 @@ function Gui(){
     //   1st loop: linkStore populated with old and parent
     //   2nd loop: remove old, and add new links to/from DOM
     var linkStore = [];
-    myLog("doStart START");
+    util.myLog("doStart START");
     var link = document.getElementsByTagName("A");
     for (var i=0; i < link.length; i++){
       var curLink = link[i];
-      myLog("LOOP:" + curLink);
+      util.myLog("LOOP:" + curLink);
       // add tuple to store
       var linkInfo = {};
       linkInfo['old']     = curLink;
       linkInfo['anc']     = curLink.parentElement;
       linkStore.push(linkInfo);
     }
-    myLog("Create links, add to DOM");
+    util.myLog("Create links, add to DOM");
 
     // Adjust: remove old links, insert new
     for (var i=0; i < linkStore.length; i++){
@@ -124,51 +116,56 @@ function Gui(){
       var url = curLink.href;
       var txt = curLink.text;    
       var trackBut = mkTrackLink(url, txt);
-      myLog("track but build, text:" + trackBut.value + "  fn: " + trackBut.onclick);
+      util.myLog("track but build, text:" + trackBut.value + "  fn: " + trackBut.onclick);
        // remove old, add new
-       myLog("ALTER DOM. \n Old: " + info.old + " New: " + trackBut);
+       util.myLog("ALTER DOM. \n Old: " + info.old + " New: " + trackBut);
        parent.removeChild(curLink);
        parent.appendChild(trackBut);
     }
-    myLog("doStart END");
+    util.myLog("doStart END");
   };
 
   function mkTrackLink(ref, txt){
   // trackLink: DOM item -> DOM item
-    myLog("trackLink");
+    util.myLog("trackLink");
     var code = "trackThis(\'".concat(txt);
     code = code.concat("','");
     code = code.concat(ref);
     code = code.concat("\');}");
-    myLog("STRING: " + code);
-    myLog("trackThis, code : " + code);
+    util.myLog("STRING: " + code);
+    util.myLog("trackThis, code : " + code);
 
     var butLink = document.createElement("BUTTON");
     butLink.value = txt;
     butLink.type  = "button";
     butLink.innerHTML = txt;
     butLink.onclick = function(){
-      myLog("Inside generated button onclick");
+      util.myLog("Inside generated button onclick");
       trackThis(txt, ref);
     }
     return butLink;
   }
+  // trackThis: add to history
+  function trackThis(txt, ref){
+    util.myLog("trackThis :" + ref);
+    global.history[txt] = ref;
+    showLocal(ref);
+  }
+
+  // showLocal: show in iframe
+  function showLocal(href){
+    console.log("showLocal: " + href);
+    //makeCorsRequest(href)
+    load(href);
+  }
+  function load(url){
+    global.insert.style.visibility = "visible";
+    global.page.src = url;
+    global.page.style.visibility = "visible";
+  } 
 }// end of Gui-object
 
 
-// FUNS CALLED WHEN RECORDING ON
-
-// trackThis: add to history
-function trackThis(txt, ref){
-  myLog("trackThis :" + ref);
-  global.history[txt] = ref;
-  showLocal(ref);
-}
-
-// showLocal: show in iframe
-function showLocal(href){
-  console.log("showLocal: " + href);
-  //makeCorsRequest(href)
-  load(href);
-}
-
+// execute
+var util = new Util();
+var run  = new Run();
