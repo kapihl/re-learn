@@ -1,5 +1,5 @@
+"use strict";
 // Load DOM into JS-context. Simple, non-async
-
 // util
 function Util(){
   this.myLog = function(msg){
@@ -12,19 +12,19 @@ function Util(){
 
 // 'class' Run: prepare, setup and run
 function Run(){
-  global = { "history": {}, "insert": null, "page": null, "util": null};
+  var global = { "history": {}, "insert": null, "page": null, "util": null};
   var init = initialize();
   global.insert = init.insert;
   global.page   = init.page;
  
   function initialize(){
     console.log("util " + util + " string " + util.toString());
-    var gui = new Gui();
+    var gui = new Gui(global);
     console.log("gui " + gui + " string " + gui.toString());
     util.myLog("init START");
   
    var button = document.getElementsByTagName("BUTTON");
-    for (i=0; i < button.length; i++){
+    for (var i=0; i < button.length; i++){
       gui.command(button[i])
 	  }
     // hide GUI for showing visited links
@@ -45,7 +45,7 @@ function Run(){
 
 
 // 'class' Gui: most of payload functionality.
-function Gui(){
+function Gui(global){
   this.command = function (cmd){
     var status = document.getElementById("statusMsg");
     cmd.onclick = function(){
