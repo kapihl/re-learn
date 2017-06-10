@@ -13,13 +13,34 @@ app.listen(3000, function () {
 });
 
 // get and return external html-page
-app.get('/external', function (req, res){
+app.get('/external', function (req, res, url){
+  var hasUrl = false;
+  if (typeof req.query.url != 'undefined') {
+    hasUrl = true;
+    url    = req.query.url;
+  }
+  if (!hasUrl) throw res.error;
+  // url exists, get page and return it
+
   getPage(function(data){
+    console.log("URL is : " + url);
     res.setHeader('Content-Type', 'text/html');
     res.send(data);
-  });
+  }, url);
 });
 
+// get page: param theUrl
+function getPage(cb, theUrl){
+  urlStr = 'https://' + theUrl;
+  console.log("in getPage, url is" + theUrl);
+  request({
+    method: 'GET',
+    url: urlStr
+  }, function(err, response, data){
+    if(err) return console.error(err);
+    cb(data);
+  });
+}
 
 // read page from file
 app.get('/buttons', function (req, res){
@@ -52,13 +73,4 @@ function readHtml(cb){
   });
 }
 
-// get hardcoded page
-function getPage(cb){
-  request({
-    method: 'GET',
-    url: 'https://www.dr.dk/tv/oversigt'
-  }, function(err, response, data){
-    if(err) return console.error(err);
-    cb(data);
-  });
-}
+
