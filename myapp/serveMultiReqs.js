@@ -5,6 +5,7 @@ var localFile = "simplePage.html";
 const express = require('express');
 const app = express();
 var request = require('request');
+
 var fs = require('fs');
 
 app.listen(3000, function () {
@@ -21,7 +22,8 @@ app.get('/external', function (req, res, url){
   }
   if (!hasUrl) throw res.error;
   // url exists, get page and return it
-
+  console.log("------------------------");
+  console.log("fetching external page");
   getPage(function(data){
     console.log("URL is : " + url);
     res.setHeader('Content-Type', 'text/html');
@@ -31,8 +33,8 @@ app.get('/external', function (req, res, url){
 
 // get page: param theUrl
 function getPage(cb, theUrl){
-  urlStr = 'https://' + theUrl;
-  console.log("in getPage, url is" + theUrl);
+  urlStr = theUrl;
+  console.log("in getPage, url is: " + theUrl);
   request({
     method: 'GET',
     url: urlStr
