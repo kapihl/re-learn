@@ -118,8 +118,11 @@ function Gui(global){
     load(href);
   }
   function load(url){
+    console.log("in load. URL is " + url);
     global.insert.style.visibility = "visible";
-    global.page.src = url;
+    // CMD-line call: localhost:3000/external?url=http://www.dr.dk
+    var urlStr = "http://127.0.0.1:3000/external?url=" + url;
+    global.page.src = urlStr;
     global.page.style.visibility = "visible";
   } 
 }// end of Gui-object
