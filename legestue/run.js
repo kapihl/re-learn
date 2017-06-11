@@ -1,9 +1,20 @@
 // 'class' Run: prepare, setup and run
 function Run(){
-  var global = { "history": {}, "insert": null, "page": null, "util": null};
+
+  var global = {
+    "base" : null,        // base document
+    "history": {},        // track visited pages
+    "insert": null,       // DOM elem
+    "page": null,         // iframe for external page
+    "isNewPage" : false   // reload frame
+  };
+
   var init = initialize();
   global.insert = init.insert;
   global.page   = init.page;
+  global.base = window.location.href;
+  util.myLog("Base doc is: " + global.base);
+
  
   function initialize(){
     console.log("util " + util + " string " + util.toString());
@@ -11,7 +22,7 @@ function Run(){
     console.log("gui " + gui + " string " + gui.toString());
     util.myLog("init START");
   
-   var button = document.getElementsByTagName("BUTTON");
+    var button = document.getElementsByTagName("BUTTON");
     for (var i=0; i < button.length; i++){
       gui.command(button[i])
 	  }
@@ -22,6 +33,7 @@ function Run(){
     iframe.height = 800;
     iframe.sandbox ="allow-scripts allow-popups allow-forms allow-same-origin";
     iframe.style.visibility = "hidden";
+
     // insert at div tag
     var myDiv = document.getElementById("loadLocalFrame");
     myDiv.style.visibility = "hidden";
