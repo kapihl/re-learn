@@ -3,6 +3,7 @@
 
 var localFile = "simplePage.html";
 const express = require('express');
+const cheerio = require('cheerio');
 const app = express();
 var request = require('request');
 
@@ -27,7 +28,12 @@ app.get('/external', function (req, res, url){
   getPage(function(data){
     console.log("URL is : " + url);
     res.setHeader('Content-Type', 'text/html');
-    res.send(data);
+    var baseStr = "<base href=" + url + "/>";
+    var comment = "<!-- NB: This page was altered by serveMultiReqs.js -->";
+    $ = cheerio.load(data);
+    $('body').prepend(comment);
+    $('head').prepend(baseStr);
+    res.send($.html());
   }, url);
 });
 
