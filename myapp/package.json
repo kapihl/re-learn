@@ -1,15 +1,14 @@
+
 {
-  "name": "myapp",
-  "version": "1.0.0",
-  "description": "test app",
-  "main": "app.js",
-  "scripts": {
-    "test": "test"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.15.3",
-    "request": "^2.81.0"
+  "name"         : "node-web-scrape",
+  "version"      : "0.0.1",
+  "description"  : "Scrape le web.",
+  "main"         : "server.js",
+  "author"       : "Scotch",
+  "dependencies" : {
+    "express"    : "latest",
+    "request"    : "latest",
+    "cheerio"    : "latest"
   }
 }
+
