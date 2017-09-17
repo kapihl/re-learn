@@ -1,0 +1,39 @@
+Modellering
+
+Dette skal ikke tages alt bogstaveligt, men er led i processen med at finde ud af hvad TODO+ skal kunne.
+
+Metode: SML type notation
+Fordele: præcis og kortfattet
+
+---
+
+type todo     // basic type, contains branches, tasks and dependencies
+type irep     // json-bases representation
+type native   // abstract type: represents all that TODO+ interacts with (files, foreign DBs, ...)
+
+type branch   // some task can contain or branch into other tasks (overarching or sub-tasks)
+type depend   // a task may depend upon other tasks
+type task     // a task is at single thing that can be done
+
+newTodo: unit -> todo
+modifyTodo : todo -> todo
+joinTodo: todo -> todo
+splitTodo: todo -> todo
+
+goBack: todo * int -> todo
+goForward: todo * int -> todo
+
+undo: todo * int -> todo
+redo: todo * int -> todo
+
+visualize: todo -> int
+
+load:   native -> irep
+readIn: irep -> todo
+import: native -> todo
+
+persist: irep -> native
+readOut: todo -> irep
+export:  todo -> native
+
+
